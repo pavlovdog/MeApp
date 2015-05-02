@@ -1,42 +1,10 @@
 <ion-view view-title="Me">
   <ion-content class="padding">
-<!-- 	<div class="list card">
-		<div class="item item-divider">Upcoming</div>
-			<div class="item item-body">
-			<div>
-				You have <b>29</b> meetings on your calendar tomorrow.
-			</div>
-		</div>
-	</div> -->
-	<div class="list">
+	<div class="list" ng-repeat="contact in contacts">
 		<a class="item item-icon-left" href="#">
-			<i class="icon ion-social-twitter-outline"></i>
-			<h2>Twitter</h2>
-			<p>@pavlovdog</p>
-		</a>
-
-		<a class="item item-icon-left" href="#">
-			<i class="icon ion-social-facebook-outline"></i>
-			<h2>Facebook</h2>
-			<p>facebook.pavlovdog.com</p>
-		</a>
-
-		<a class="item item-icon-left" href="#">
-			<i class="icon ion-social-github-outline"></i>
-			<h2>Github</h2>
-			<p>github.pavlovdog.com</p>
-		</a>
-
-		<a class="item item-icon-left" href="#">
-			<i class="icon ion-social-instagram-outline"></i>
-			<h2>Instagram</h2>
-			<p>#pavlovdog</p>
-		</a>
-
-		<a href="#" class="item item-icon-left">
-			<i class="icon ion-ios-telephone-outline"></i>
-			<h2>Phone number</h2>
-			<p>8-916-123-24-42</p>
+			<i class="{{contact.image}}"></i>
+			<h2>{{contact.resourse}}</h2>
+			<p>{{contact.name}}</p>
 		</a>
 	</div>
   </ion-content>
