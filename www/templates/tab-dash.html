@@ -1,11 +1,18 @@
 <ion-view view-title="Me">
   <ion-content class="padding">
-	<div class="list" ng-repeat="contact in contacts">
-		<a class="item item-icon-left" href="#">
+  	<ion-list show-delete="shouldShowDelete">
+  		<ion-item class="item-icon-left item-remove-animate" href="#" ng-repeat="contact in contacts">
 			<i class="{{contact.image}}"></i>
 			<h2>{{contact.resourse}}</h2>
 			<p>{{contact.name}}</p>
-		</a>
-	</div>
+		
+			<ion-option-button class="button-balanced" ng-click='ShowEdit()'>
+				&nbsp&nbspEdit&nbsp&nbsp
+			</ion-option-button>
+			<ion-option-button class="button-assertive" ng-click="ShowConfirm(contact)">
+				Delete
+			</ion-option-button>
+		</ion-item>
+  	</ion-list>
   </ion-content>
 </ion-view>
