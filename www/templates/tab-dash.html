@@ -1,15 +1,17 @@
 <ion-view view-title="Me">
   <ion-content class="padding">
   	<ion-list show-delete="shouldShowDelete">
-  		<ion-item class="item-icon-left item-remove-animate" href="#" ng-repeat="(resource,name) in contacts.pavlovdog">
-			<!-- <i class="{{contact.image}}"></i> -->
-			<h2>{{resource}}</h2>
+  		<ion-item class="item-icon-left item-remove-animate" href="#" ng-repeat="(resource,name) in contacts">
+			<i class="{{iconByResource(resource)}}"></i>
+
+			<!-- resource looks like 'facebook' and we turn it into 'Facebook' -->
+			<h2>{{resource[0].toUpperCase() + resource.slice(1)}}</h2>
 			<p>{{name}}</p>
-		
+ 		
 			<ion-option-button class="button-balanced" ng-click='ShowEdit(contact)'>
 				&nbsp&nbspEdit&nbsp&nbsp
 			</ion-option-button>
-			<ion-option-button class="button-assertive" ng-click="ShowConfirm(contact)">
+			<ion-option-button class="button-assertive" ng-click="ShowConfirm(resource)">
 				Delete
 			</ion-option-button>
 		</ion-item>

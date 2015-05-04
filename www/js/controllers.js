@@ -2,95 +2,52 @@ angular.module('starter.controllers', ['ionic','firebase'])
 
 .controller('DashCtrl', ['$scope','$ionicPopup','$timeout','$firebaseObject',
 	function($scope,$ionicPopup,$timeout,$firebaseObject) {
-		var ref = new Firebase("https://meappionic.firebaseio.com/");
-
-		// // download the data into a local object
-		$scope.FB = $firebaseObject(ref);
-		console.log($scope.FB);
-
-		// $scope.contacts=$scope.FB;
-		// List of contacts
-		// Don't delete after firebase adding! 
+		
+		// Local list of contacts for debugging
 		$scope.contacts=
 		{
-		pavlovdog:[
-			{	
-						id: 0,
-						resourse: 'Twitter',
-						name: '@pavlovdog',
-						image: 'icon ion-social-twitter-outline'
-					},{
-						id: 1,
-						resourse: 'Facebook',
-						name: 'facebook.pavlovdog.com',
-						image: 'icon ion-social-facebook-outline'
-					},{
-						id: 2,
-						resourse: 'Github',
-						name: 'pavlovdog@github.com',
-						image: 'icon ion-social-github-outline'
-					},{
-						id: 3,
-						resourse: 'Instagram',
-						name: '#pavlovdog',
-						image: 'icon ion-social-instagram-outline'
-					},{
-						id: 4,
-						resourse: 'Phone number',
-						name: '8-(916)-123-23-57',
-						image: 'icon ion-ios-telephone-outline'
-					}],
-		guest: 	  [
-			{	
-						id: 0,
-						resourse: 'Twitter',
-						name: '@guest',
-						image: 'icon ion-social-twitter-outline'
-					},{
-						id: 1,
-						resourse: 'Facebook',
-						name: 'facebook.guest.com',
-						image: 'icon ion-social-facebook-outline'
-					},{
-						id: 2,
-						resourse: 'Github',
-						name: 'guest@github.com',
-						image: 'icon ion-social-github-outline'
-					},{
-						id: 3,
-						resourse: 'Instagram',
-						name: '#guest',
-						image: 'icon ion-social-instagram-outline'
-					},{
-						id: 4,
-						resourse: 'Phone number',
-						name: '8-(303)-924-23-57',
-						image: 'icon ion-ios-telephone-outline'
-					}]
+			twitter: '@pavlovdog',
+			facebook: 'facebook.pavlovdog.com',
+			github: 'pavlovdog@github.com',
+			instagram: '#pavlovdog',
+			phone_home: '8-(916)-123-23-57'
 		};
 
-		// Turn contacts to JSON valid file
-		// console.log(JSON.stringify($scope.contacts));
+		// Returns icon name for resources
+		$scope.iconByResource = function(resourse){
+			var IconsDict={
+				'facebook' : 'icon ion-social-facebook-outline',
+				'twitter' : 'icon ion-social-twitter-outline',
+				'github' : 'icon ion-social-github-outline',
+				'instagram' : 'icon ion-social-instagram-outline',
+				'phone_home' : 'icon ion-ios-telephone-outline'
+			}
+
+			return IconsDict[resourse]
+		};
 
 		// Confirm message to delete
-		$scope.ShowConfirm = function(contact) {
-			// console.log(contact);
-			// var confirmPopup = $ionicPopup.confirm({
-			// 	title: 'Are you sure?',
-			// 	cancelText: 'No',
-			// 	okText: 'Yes'     
-			// });
-			// confirmPopup.then(function(res) {
-			// 	if(res) {
-			// 		$scope.contacts.splice($scope.contacts.indexOf(contact),1);
-			// 	} else {
-			// 		console.log('Nope');
-			// 	}
-			// });
+		$scope.ShowConfirm = function(resource) {
+			var confirmPopup = $ionicPopup.confirm({
+				title: 'Are you sure?',
+				cancelText: 'No',
+				okText: 'Yes'     
+			});
+			confirmPopup.then(function(res) {
+				if(res) {
+					delete $scope.contacts[resource]
+				} else {
+					console.log('Nope');
+				}
+			});
 		};
 
 		// Edit alert for contact, one day i'll fix it
 		$scope.ShowEdit = function(contact) {}
+	
+		// Turn contacts to JSON valid file
+		// console.log(JSON.stringify($scope.contacts));
+
 	}
 ])
 
