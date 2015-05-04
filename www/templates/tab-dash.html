@@ -1,7 +1,7 @@
 <ion-view view-title="Me">
   <ion-content class="padding">
   	<ion-list>
-  		<ion-item class="item-icon-left item-remove-animate" ng-repeat="(resource,name) in contacts">
+  		<ion-item class="item-icon-left item-remove-animate" ng-repeat="(resource,name) in contacts" href="#/tab/dash/{{name}}">
 			<i class="{{iconByResource(resource)}}"></i>
 
 			<!-- resource looks like 'facebook' and we turn it into 'Facebook' -->

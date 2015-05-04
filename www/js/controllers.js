@@ -63,11 +63,6 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		// Edit alert for contact, one day i'll fix it
 		$scope.ShowEdit = function(resource) {};
 
-		// Turn contacts to JSON valid file
-		// console.log(JSON.stringify($scope.contacts));
-
-		$scope.AddNew = function(){};
-
 }])
 
 .controller('ChatsCtrl', function($scope, Chats) {
@@ -85,8 +80,8 @@ angular.module('starter.controllers', ['ionic','firebase'])
   $scope.settings = {
     enableFriends: false
   };
-});
+})
 
-// .controller('NewCtrl', ['$scope', function($scope){
-// 	$scope.tmp='Hello,world';
-// }]);
+.controller('NewCtrl', ['$scope', function($scope){
+	$scope.tmp='Hello,world';
+}]);
