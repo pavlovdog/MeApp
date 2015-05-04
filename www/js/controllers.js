@@ -2,16 +2,18 @@ angular.module('starter.controllers', ['ionic','firebase'])
 
 .controller('DashCtrl', ['$scope','$ionicPopup','$timeout','$firebaseObject',
 	function($scope,$ionicPopup,$timeout,$firebaseObject) {
-		// var ref = new Firebase("https://meappionic.firebaseio.com/");
+		var ref = new Firebase("https://meappionic.firebaseio.com/");
 
 		// // download the data into a local object
-		// $scope.FB = $firebaseObject(ref);
-		// console.log($scope.FB);
+		$scope.FB = $firebaseObject(ref);
+		console.log($scope.FB);
 
 		// List of contacts
 		// Don't delete after firebase adding! 
 		$scope.contacts=
-		{pavlovdog:[{	
+		{
+		pavlovdog:[
+			{	
 						id: 0,
 						resourse: 'Twitter',
 						name: '@pavlovdog',
@@ -37,7 +39,8 @@ angular.module('starter.controllers', ['ionic','firebase'])
 						name: '8-(916)-123-23-57',
 						image: 'icon ion-ios-telephone-outline'
 					}],
-		guest: 	    [{	
+		guest: 	  [
+			{	
 						id: 0,
 						resourse: 'Twitter',
 						name: '@guest',
@@ -64,7 +67,10 @@ angular.module('starter.controllers', ['ionic','firebase'])
 						image: 'icon ion-ios-telephone-outline'
 					}]
 		};
-		console.log(JSON.stringify($scope.contacts));
+
+		// Turn contacts to JSON valid file
+		// console.log(JSON.stringify($scope.contacts));
+		
 		// Confirm message to delete
 		$scope.ShowConfirm = function(contact) {
 			console.log(contact);
