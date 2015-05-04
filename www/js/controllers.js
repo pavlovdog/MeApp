@@ -8,6 +8,7 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		$scope.FB = $firebaseObject(ref);
 		console.log($scope.FB);
 
+		// $scope.contacts=$scope.FB;
 		// List of contacts
 		// Don't delete after firebase adding! 
 		$scope.contacts=
@@ -70,22 +71,23 @@ angular.module('starter.controllers', ['ionic','firebase'])
 
 		// Turn contacts to JSON valid file
 		// console.log(JSON.stringify($scope.contacts));
-		
+
 		// Confirm message to delete
 		$scope.ShowConfirm = function(contact) {
-			console.log(contact);
-			var confirmPopup = $ionicPopup.confirm({
-				title: 'Are you sure?',
-				cancelText: 'No',
-				okText: 'Yes'     
-			});
-			confirmPopup.then(function(res) {
-				if(res) {
-					$scope.contacts.splice($scope.contacts.indexOf(contact),1);
-				} else {
-					console.log('Nope');
-				}
-			});};
+			// console.log(contact);
+			// var confirmPopup = $ionicPopup.confirm({
+			// 	title: 'Are you sure?',
+			// 	cancelText: 'No',
+			// 	okText: 'Yes'     
+			// });
+			// confirmPopup.then(function(res) {
+			// 	if(res) {
+			// 		$scope.contacts.splice($scope.contacts.indexOf(contact),1);
+			// 	} else {
+			// 		console.log('Nope');
+			// 	}
+			// });
+		};
 
 		// Edit alert for contact, one day i'll fix it
 		$scope.ShowEdit = function(contact) {}
