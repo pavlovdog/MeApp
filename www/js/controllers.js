@@ -19,7 +19,6 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		// 	phone_home: '8-(916)-123-23-57',
 		// };
 
-
 		// Returns icon name for resources
 		$scope.iconByResource = function(resourse){
 			var IconsDict={
@@ -65,23 +64,24 @@ angular.module('starter.controllers', ['ionic','firebase'])
 
 }])
 
+.controller('NewCtrl', ['$scope', '$stateParams', function($scope, $stateParams) {
+  console.log('$stateParams: ',$stateParams);
+}])
+
 .controller('ChatsCtrl', function($scope, Chats) {
   $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  }
+  // console.log('Chats.all() = ', $scope.chats);
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
+.controller('ChatDetailCtrl', ['$scope', '$stateParams', function($scope, $stateParams) {
+  $scope.chatId = $stateParams.chatId;
+  console.log('$stateParams: ',$stateParams);
+}])
 
 .controller('AccountCtrl', function($scope) {
   $scope.settings = {
     enableFriends: false
   };
-})
+});
 
-.controller('NewCtrl', ['$scope', function($scope){
-	$scope.tmp='Hello,world';
-}]);
+

@@ -49,7 +49,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   })
 
   .state('tab.new-contact',{
-    url: '/dash/:name',
+    url: '/dash/:resourceName/:pageTitle',
     views: {
       'tab-dash': {
         templateUrl: 'templates/tab-new.html',

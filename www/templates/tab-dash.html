@@ -1,17 +1,14 @@
 <ion-view view-title="Me">
   <ion-content class="padding">
   	<ion-list>
-  		<ion-item class="item-icon-left item-remove-animate" ng-repeat="(resource,name) in contacts" href="#/tab/dash/{{name}}">
-			<i class="{{iconByResource(resource)}}"></i>
+  		<ion-item class="item-icon-left item-remove-animate" ng-repeat="(resourceName,name) in contacts" type="item-text-wrap" href="#/tab/dash/{{resourceName}}/Edit">
+			<i class="{{iconByResource(resourceName)}}"></i>
 
-			<!-- resource looks like 'facebook' and we turn it into 'Facebook' -->
-			<h2>{{resource[0].toUpperCase() + resource.slice(1)}}</h2>
+			<!-- resourceName looks like 'facebook' and we turn it into 'Facebook' -->
+			<h2>{{resourceName[0].toUpperCase() + resourceName.slice(1)}}</h2>
 			<p>{{name}}</p>
  		
-			<ion-option-button class="button-balanced" ng-click='ShowEdit(resource)'>
-				&nbsp&nbspEdit&nbsp&nbsp
-			</ion-option-button>
-			<ion-option-button class="button-assertive" ng-click="ShowConfirm(resource)">
+			<ion-option-button class="button-assertive" ng-click="ShowConfirm(resourceName)">
 				Delete
 			</ion-option-button>
 		</ion-item>
