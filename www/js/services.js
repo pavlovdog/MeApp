@@ -40,5 +40,32 @@ angular.module('starter.services', [])
 	  chats.splice(chats.indexOf(chat), 1);
 	}
   };
-});
+})
 
+.factory('ContactsBase',  function(){
+	// Returns icon name for resources
+	var IconsDict={
+		'facebook' : 'icon ion-social-facebook-outline',
+		'twitter' : 'icon ion-social-twitter-outline',
+		'github' : 'icon ion-social-github-outline',
+		'instagram' : 'icon ion-social-instagram-outline',
+		'phone_home' : 'icon ion-ios-telephone-outline',
+		'linkedin' : 'icon ion-social-linkedin-outline',
+		'twitch' : 'icon ion-social-twitch-outline',
+		'googleplus' : 'icon ion-social-googleplus-outline',
+		'snapchat' : 'icon ion-social-snapchat-outline',
+		'whatsapp' : 'icon ion-social-whatsapp-outline',
+		'pinterest' : 'icon ion-social-pinterest-outline',
+		'foursquare' : 'icon ion-social-foursquare-outline',
+		'skype' : 'icon ion-social-skype-outline',
+		'vimeo' : 'icon ion-social-vimeo-outline',
+		'dribble' : 'icon ion-social-dribbble-outline'
+	}
+
+	return {
+		iconByResource: function(resource){
+			return IconsDict[resource]
+		}
+		
+	};
+});

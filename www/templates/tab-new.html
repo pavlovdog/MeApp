@@ -1,5 +1,16 @@
-<ion-view view-title="Edit">
-  <ion-content>
-  	<p>Hi!</p>
-  </ion-content>
+<ion-view view-title="{{pageTitle}}&nbsp{{resourceName}}">
+	<ion-content>
+		<div class="card">
+			<div class="item item-text-wrap">
+				<label class="item item-input item-floating-label">
+					<span class="input-label">New login</span>
+					<input type="text" placeholder="New login" ng-model="newLogin">
+				</label>
+			</div>
+		</div>
+	<button class="button button-full button-stable" ng-click="saveNewLogin(newLogin)">
+		Save
+	</button>
+
+	</ion-content>
 </ion-view>

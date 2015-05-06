@@ -42,6 +42,8 @@ angular.module('starter.controllers', ['ionic','firebase'])
 			return IconsDict[resourse]
 		};
 
+		// $scope.iconByResource = ContactsBase.iconByResource(resource);
+
 		// Confirm message to delete
 		$scope.ShowConfirm = function(resource) {
 			var confirmPopup = $ionicPopup.confirm({
@@ -59,13 +61,35 @@ angular.module('starter.controllers', ['ionic','firebase'])
 			});
 		};
 
-		// Edit alert for contact, one day i'll fix it
-		$scope.ShowEdit = function(resource) {};
-
 }])
 
-.controller('NewCtrl', ['$scope', '$stateParams', function($scope, $stateParams) {
-  console.log('$stateParams: ',$stateParams);
+.controller('NewCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray',
+	function($scope, $stateParams,$firebaseObject,$firebaseArray){ 
+		// console.log('$stateParams: ',$stateParams);
+		$scope.pageTitle = $stateParams.pageTitle;
+		$scope.resourceName = $stateParams.resourceName;
+
+		var ref = new Firebase("https://meappionic.firebaseio.com/pavlovdog/"+$scope.resourceName+"/");
+		$scope.userData = $firebaseObject(ref); 
+
+		// console.log($scope.userData);
+		// $scope.userData.$value="newId";
+		// $scope.userData.$save();
+
+		$scope.saveNewLogin = function(newLogin){
+			if (newLogin){
+				$scope.userData.$value = newLogin;
+				$scope.userData.$save()
+				// console.log("userData: ",$scope.userData);
+				// console.log("newLogin: ", newLogin);
+			}
+		}
+
+
+
+
+
+
 }])
 
 .controller('ChatsCtrl', function($scope, Chats) {
