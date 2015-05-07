@@ -147,7 +147,20 @@ angular.module('starter.controllers', ['ionic','firebase'])
 .controller('NewAddCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray',
 	function($scope, $stateParams,$firebaseObject,$firebaseArray){
 		$scope.resourceName = $stateParams.resourceName;
+		var ref = new Firebase("https://meappionic.firebaseio.com/pavlovdog/"+$scope.resourceName);
+		$scope.userData = $firebaseObject(ref);
 
-}])
+		// $scope.userData.$loaded().then(function(){
+		// 	// $scope.userData.$add({github: "pavlovdog@github.com"});
+		// 	$scope.userData.$value = 'pavlovdog@github.com';
+		// 	$scope.userData.$save();
+		// 	console.log($scope.userData);
+		// })
+
+		$scope.addNew = function(login){
+			$scope.userData.$value = login;
+			$scope.userData.$save();
+		}
+}])	
 ;
 

@@ -1,8 +1,15 @@
-<ion-view view-title="chat-detail">
+<ion-view view-title="Add {{resourceName[0].toUpperCase() + resourceName.slice(1)}}">
   <ion-content class="padding">
-    <p>
-   	 HW!
-    </p>
-    {{resourceName}}
+		<div class="card">
+			<div class="item item-text-wrap">
+				<label class="item item-input item-floating-label">
+					<span class="input-label">Your login</span>
+					<input type="text" placeholder="Your login" ng-model="newLogin">
+				</label>
+			</div>
+		</div>
+	<button class="button button-full button-stable" ng-click="addNew(newLogin)">
+		Save
+	</button>
   </ion-content>
 </ion-view>
