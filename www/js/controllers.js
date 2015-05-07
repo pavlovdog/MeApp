@@ -10,15 +10,6 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		var syncObject = $firebaseArray(ref); 
 		syncObject.$bindTo($scope, "contacts");
 
-		// Local list of contacts for debugging
-		// $scope.contacts={
-		// 	twitter: '@pavlovdog',
-		// 	facebook: 'facebook.pavlovdog.com',
-		// 	github: 'pavlovdog@github.com',
-		// 	instagram: '#pavlovdog',
-		// 	phone_home: '8-(916)-123-23-57',
-		// };
-
 		// Returns icon name for resources
 		$scope.iconByResource = function(resourse){
 			var IconsDict={
@@ -61,9 +52,18 @@ angular.module('starter.controllers', ['ionic','firebase'])
 			});
 		};
 
-}])
+		// Local list of contacts for debugging
+		// $scope.contacts={
+		// 	twitter: '@pavlovdog',
+		// 	facebook: 'facebook.pavlovdog.com',
+		// 	github: 'pavlovdog@github.com',
+		// 	instagram: '#pavlovdog',
+		// 	phone_home: '8-(916)-123-23-57',
+		// };
 
-.controller('NewCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray',
+	}])
+
+.controller('EditCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray',
 	function($scope, $stateParams,$firebaseObject,$firebaseArray){ 
 		// console.log('$stateParams: ',$stateParams);
 		$scope.pageTitle = $stateParams.pageTitle;
@@ -85,11 +85,6 @@ angular.module('starter.controllers', ['ionic','firebase'])
 			}
 		}
 
-
-
-
-
-
 }])
 
 .controller('ChatsCtrl', function($scope, Chats) {
@@ -106,6 +101,53 @@ angular.module('starter.controllers', ['ionic','firebase'])
   $scope.settings = {
     enableFriends: false
   };
-});
+})
 
+.controller('NewListCtrl',['$scope','$ionicPopup','$timeout','$firebaseObject','$firebaseArray', 
+	function($scope,$ionicPopup,$firebaseObject,$firebaseArray){
+		var ref = new Firebase("https://meappionic.firebaseio.com/pavlovdog/");
+		var syncObject = $firebaseArray(ref);
+		syncObject.$bindTo($scope,"userData");
+		syncObject.$loaded().
+			then(function(){
+				$scope.existResources = Object.keys($scope.userData)
+			});
+
+
+		$scope.iconByResource = function(resourse){
+			var IconsDict={
+				'facebook' : 'icon ion-social-facebook-outline',
+				'twitter' : 'icon ion-social-twitter-outline',
+				'github' : 'icon ion-social-github-outline',
+				'instagram' : 'icon ion-social-instagram-outline',
+				'phone_home' : 'icon ion-ios-telephone-outline',
+				'linkedin' : 'icon ion-social-linkedin-outline',
+				'twitch' : 'icon ion-social-twitch-outline',
+				'googleplus' : 'icon ion-social-googleplus-outline',
+				'snapchat' : 'icon ion-social-snapchat-outline',
+				'whatsapp' : 'icon ion-social-whatsapp-outline',
+				'pinterest' : 'icon ion-social-pinterest-outline',
+				'foursquare' : 'icon ion-social-foursquare-outline',
+				'skype' : 'icon ion-social-skype-outline',
+				'vimeo' : 'icon ion-social-vimeo-outline',
+				'dribble' : 'icon ion-social-dribbble-outline'
+			}
+
+			return IconsDict[resourse]
+		};
+
+		$scope.allKeys=["facebook", "twitter", "github", 
+						"instagram", "phone_home", "linkedin", 
+						"twitch", "googleplus", "snapchat", 
+						"whatsapp", "pinterest", "foursquare", 
+						"skype", "vimeo", "dribble"]
+		
+}])
+
+.controller('NewAddCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray',
+	function($scope, $stateParams,$firebaseObject,$firebaseArray){
+		$scope.resourceName = $stateParams.resourceName;
+
+}])
+;
 

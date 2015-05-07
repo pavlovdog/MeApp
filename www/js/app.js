@@ -48,12 +48,32 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     }
   })
 
-  .state('tab.new-contact',{
-    url: '/dash/:resourceName/:pageTitle',
+  .state('tab.edit-contact',{
+    url: '/dash/edit/:resourceName/:pageTitle',
     views: {
       'tab-dash': {
-        templateUrl: 'templates/tab-new.html',
-        controller: 'NewCtrl'
+        templateUrl: 'templates/tab-edit.html',
+        controller: 'EditCtrl'
+      }
+    }
+  })
+
+  .state('tab.new-list',{
+    url: '/dash/newList',
+    views: {
+      'tab-dash': {
+        templateUrl: 'templates/tab-new-list.html',
+        controller: 'NewListCtrl'
+      }
+    }
+  })
+
+  .state('tab.new-add',{
+    url: '/dash/newAdd/:resourceName',
+    views: {
+      'tab-dash': {
+        templateUrl: 'templates/tab-new-add.html',
+        controller: 'NewAddCtrl'
       }
     }
   })

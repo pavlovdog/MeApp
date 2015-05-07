@@ -1,0 +1,17 @@
+<ion-view view-title="Add new">
+	<ion-content class="padding">
+		<ion-list>
+			<ion-item class="item-icon-left" ng-repeat="resource in allKeys" ng-if="existResources.indexOf(resource)==-1" href="#/tab/dash/newAdd/{{resource}}">
+				<i class="{{iconByResource(resource)}}"></i>
+				<h2>{{resource[0].toUpperCase() + resource.slice(1)}}</h2>
+			</ion-item>
+		</ion-list>
+
+<!-- 		<a class="item item-icon-left" href="#/tab/dash/newAdd">
+			<i class="icon ion-android-add-circle"></i>
+			Add new
+		</a>
+ -->
+	</ion-content>
+</ion-view>
+														
