@@ -5,10 +5,12 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		var authRef = new Firebase("https://meappionic.firebaseio.com/");
 		$scope.authObj = $firebaseAuth(authRef);
 		var authData = $scope.authObj.$getAuth();
-		console.log(authData);
+		// console.log(authData.password.email);
+		var userName = authData.password.email.replace(/\./g, '❒☠✍');
+		console.log(userName);
 
 		// Syncing to firebase
-		var ref = new Firebase("https://meappionic.firebaseio.com/pavlovdog/");
+		var ref = new Firebase("https://meappionic.firebaseio.com/"+userName);
 		var syncObject = $firebaseArray(ref); 
 		syncObject.$bindTo($scope, "contacts");
 
@@ -29,7 +31,8 @@ angular.module('starter.controllers', ['ionic','firebase'])
 				'foursquare' : 'icon ion-social-foursquare-outline',
 				'skype' : 'icon ion-social-skype-outline',
 				'vimeo' : 'icon ion-social-vimeo-outline',
-				'dribble' : 'icon ion-social-dribbble-outline'
+				'dribble' : 'icon ion-social-dribbble-outline',
+				'email': 'icon ion-android-mail'
 			}
 
 			return IconsDict[resourse]
@@ -65,13 +68,20 @@ angular.module('starter.controllers', ['ionic','firebase'])
 
 	}])
 
-.controller('EditCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray',
-	function($scope, $stateParams,$firebaseObject,$firebaseArray){ 
+.controller('EditCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray','$firebaseAuth',
+	function($scope, $stateParams,$firebaseObject,$firebaseArray,$firebaseAuth){ 
 		// console.log('$stateParams: ',$stateParams);
 		$scope.pageTitle = $stateParams.pageTitle;
 		$scope.resourceName = $stateParams.resourceName;
 
-		var ref = new Firebase("https://meappionic.firebaseio.com/pavlovdog/"+$scope.resourceName+"/");
+		var authRef = new Firebase("https://meappionic.firebaseio.com/");
+		$scope.authObj = $firebaseAuth(authRef);
+		var authData = $scope.authObj.$getAuth();
+		// console.log(authData.password.email);
+		var userName = authData.password.email.replace(/\./g, '❒☠✍');
+
+
+		var ref = new Firebase("https://meappionic.firebaseio.com/"+userName+"/"+$scope.resourceName+"/");
 		$scope.userData = $firebaseObject(ref); 
 
 		// console.log($scope.userData);
@@ -105,9 +115,16 @@ angular.module('starter.controllers', ['ionic','firebase'])
   };
 })
 
-.controller('NewListCtrl',['$scope','$ionicPopup','$timeout','$firebaseObject','$firebaseArray', 
-	function($scope,$ionicPopup,$firebaseObject,$firebaseArray){
-		var ref = new Firebase("https://meappionic.firebaseio.com/pavlovdog/");
+.controller('NewListCtrl',['$firebaseAuth','$scope','$ionicPopup','$timeout','$firebaseObject','$firebaseArray', 
+	function($firebaseAuth,$scope,$ionicPopup,$firebaseObject,$firebaseArray){
+
+		var authRef = new Firebase("https://meappionic.firebaseio.com/");
+		$scope.authObj = $firebaseAuth(authRef);
+		var authData = $scope.authObj.$getAuth();
+		// console.log(authData.password.email);
+		var userName = authData.password.email.replace(/\./g, '❒☠✍');
+
+		var ref = new Firebase("https://meappionic.firebaseio.com/"+userName);
 		var syncObject = $firebaseArray(ref);
 		syncObject.$bindTo($scope,"userData");
 		syncObject.$loaded().
@@ -132,7 +149,8 @@ angular.module('starter.controllers', ['ionic','firebase'])
 				'foursquare' : 'icon ion-social-foursquare-outline',
 				'skype' : 'icon ion-social-skype-outline',
 				'vimeo' : 'icon ion-social-vimeo-outline',
-				'dribble' : 'icon ion-social-dribbble-outline'
+				'dribble' : 'icon ion-social-dribbble-outline',
+				'email': 'icon ion-android-mail'
 			}
 
 			return IconsDict[resourse]
@@ -142,14 +160,21 @@ angular.module('starter.controllers', ['ionic','firebase'])
 						"instagram", "phone_home", "linkedin", 
 						"twitch", "googleplus", "snapchat", 
 						"whatsapp", "pinterest", "foursquare", 
-						"skype", "vimeo", "dribble"]
+						"skype", "vimeo", "dribble","email"]
 		
 }])
 
-.controller('NewAddCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray','$state',
-	function($scope, $stateParams,$firebaseObject,$firebaseArray,$state){
+.controller('NewAddCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray','$state','$firebaseAuth',
+	function($scope, $stateParams,$firebaseObject,$firebaseArray,$state,$firebaseAuth){
 		$scope.resourceName = $stateParams.resourceName;
-		var ref = new Firebase("https://meappionic.firebaseio.com/pavlovdog/"+$scope.resourceName);
+
+		var authRef = new Firebase("https://meappionic.firebaseio.com/");
+		$scope.authObj = $firebaseAuth(authRef);
+		var authData = $scope.authObj.$getAuth();
+		// console.log(authData.password.email);
+		var userName = authData.password.email.replace(/\./g, '❒☠✍');
+
+		var ref = new Firebase("https://meappionic.firebaseio.com/"+userName+"/"+$scope.resourceName);
 		$scope.userData = $firebaseObject(ref);
 
 		// $scope.userData.$loaded().then(function(){
@@ -207,9 +232,14 @@ angular.module('starter.controllers', ['ionic','firebase'])
 						$scope.authObj.$createUser({
 							email: userEmail,
 							password: userPass
-						}).then(function(userData) {
+						}).then(function(uD) {
 						// create new user in FB, using email adress
-						console.log(userData);
+						// console.log(userData);
+						var newRef = new Firebase('https://meappionic.firebaseio.com/'+userName+'/email');
+						var userData = $firebaseObject(newRef);
+						userData.$value = userEmail;
+						userData.$save();
+
 						
 						// return to the login page
 						$state.go('signin');
