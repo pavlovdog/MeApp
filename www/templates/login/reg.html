@@ -1,0 +1,17 @@
+<ion-view view-title="Registration">
+	<ion-content padding="true">
+	<label class="item item-input item-floating-label">
+		<span class="input-label">Email</span>
+		<input type="text" placeholder="Email" ng-model="userEmail">
+	</label>
+
+	<label class="item item-input item-floating-label">
+		<span class="input-label">Password</span>
+		<input type="password" placeholder="Password" ng-model="userPass">
+	</label>
+
+
+
+	<button class="button button-block button-positive" ng-click="createNewUser(userEmail,userPass)">Reg</button>
+	</ion-content>
+</ion-view>

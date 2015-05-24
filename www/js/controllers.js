@@ -1,10 +1,12 @@
 angular.module('starter.controllers', ['ionic','firebase'])
 
+.controller('DashCtrl', ['$firebaseAuth','$scope','$ionicPopup','$timeout','$firebaseObject','$firebaseArray',
+	function($firebaseAuth,$scope,$ionicPopup,$firebaseObject,$firebaseArray) {
+		var authRef = new Firebase("https://meappionic.firebaseio.com/");
+		$scope.authObj = $firebaseAuth(authRef);
+		var authData = $scope.authObj.$getAuth();
+		console.log(authData);
 
-
-.controller('DashCtrl', ['$scope','$ionicPopup','$timeout','$firebaseObject','$firebaseArray',
-	function($scope,$ionicPopup,$firebaseObject,$firebaseArray) {
-		
 		// Syncing to firebase
 		var ref = new Firebase("https://meappionic.firebaseio.com/pavlovdog/");
 		var syncObject = $firebaseArray(ref); 
@@ -144,8 +146,8 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		
 }])
 
-.controller('NewAddCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray',
-	function($scope, $stateParams,$firebaseObject,$firebaseArray){
+.controller('NewAddCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray','$state',
+	function($scope, $stateParams,$firebaseObject,$firebaseArray,$state){
 		$scope.resourceName = $stateParams.resourceName;
 		var ref = new Firebase("https://meappionic.firebaseio.com/pavlovdog/"+$scope.resourceName);
 		$scope.userData = $firebaseObject(ref);
@@ -158,9 +160,74 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		// })
 
 		$scope.addNew = function(login){
+			// Save to FB
 			$scope.userData.$value = login;
 			$scope.userData.$save();
+
+			// Go back 2 views
+			// $state.go('tab.dash');
+
 		}
+}])
+
+.controller('SignInCtrl', ['$state','$scope', '$firebaseAuth','$firebaseObject','$firebaseArray',
+	function($state,$scope,$firebaseAuth,$firebaseObject,$firebaseArray){
+
+		var ref = new Firebase('https://meappionic.firebaseio.com/');
+		$scope.authObj = $firebaseAuth(ref);
+
+
+		$scope.SignIn = function(userEmail,userPass){
+			if (userEmail && userPass){
+				$scope.authObj.$authWithPassword({
+					email: userEmail,
+					password: userPass
+				}).then(function(user){
+					console.log("User: ", user);
+					$state.go('tab.dash');
+				})
+			}
+			// $state.go('tab.dash');
+		}
+	
 }])	
-;
+
+.controller('RegCtrl', ['$scope', '$firebaseAuth','$state','$firebaseObject','$firebaseArray',
+	function($scope,$firebaseAuth,$state,$firebaseObject,$firebaseArray){
+		var ref = new Firebase('https://meappionic.firebaseio.com/');
+		$scope.authObj = $firebaseAuth(ref);
+
+		$scope.createNewUser = function(userEmail,userPass){
+			var userName = userEmail.replace(/\./g, '❒☠✍');
+			
+			if (userEmail && userPass){
+				ref.child(userName).once('value', function(ss) {
+					if( ss.val() === null ) {
+						console.log('Doesnt exists');
+						$scope.authObj.$createUser({
+							email: userEmail,
+							password: userPass
+						}).then(function(userData) {
+						// create new user in FB, using email adress
+						console.log(userData);
+						
+						// return to the login page
+						$state.go('signin');
+
+						}).catch(function(error) {
+							console.error("Error: ", error);
+						});
+
+					}
+					else {
+						console.log('Exist');
+					}
+
+				});
+			}
+		}
+
+
+}]);	
+
 
