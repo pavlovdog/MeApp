@@ -6,7 +6,13 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		$scope.authObj = $firebaseAuth(authRef);
 		var authData = $scope.authObj.$getAuth();
 		// console.log(authData.password.email);
-		var userName = authData.password.email.replace(/\./g, '❒☠✍');
+		var userName = authData.password.email.	replace(/\./g, '❒☠').
+												replace(/\$/g, '✾✡').
+												replace(/\#/g, '❄✎').
+												replace(/\[/g, '☎☹').
+												replace(/\]/g, '❍☀').
+												replace(/\//g, '★☪');
+
 		console.log(userName);
 
 		// Syncing to firebase
@@ -42,6 +48,7 @@ angular.module('starter.controllers', ['ionic','firebase'])
 
 		// Confirm message to delete
 		$scope.ShowConfirm = function(resource) {
+
 			var confirmPopup = $ionicPopup.confirm({
 				title: 'Are you sure?',
 				cancelText: 'No',
@@ -78,7 +85,13 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		$scope.authObj = $firebaseAuth(authRef);
 		var authData = $scope.authObj.$getAuth();
 		// console.log(authData.password.email);
-		var userName = authData.password.email.replace(/\./g, '❒☠✍');
+		var userName = authData.password.email.	replace(/\./g, '❒☠').
+												replace(/\$/g, '✾✡').
+												replace(/\#/g, '❄✎').
+												replace(/\[/g, '☎☹').
+												replace(/\]/g, '❍☀').
+												replace(/\//g, '★☪');
+
 
 
 		var ref = new Firebase("https://meappionic.firebaseio.com/"+userName+"/"+$scope.resourceName+"/");
@@ -109,11 +122,21 @@ angular.module('starter.controllers', ['ionic','firebase'])
   console.log('$stateParams: ',$stateParams);
 }])
 
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: false
-  };
-})
+.controller('AccountCtrl', ['$scope','$firebaseAuth','$state',
+	function($scope,$firebaseAuth,$state) {
+
+		$scope.settings = {
+			enableFriends: false
+		};
+
+		var authRef = new Firebase("https://meappionic.firebaseio.com/");
+		var authObj = $firebaseAuth(authRef);
+
+		$scope.LogOut = function(){
+			authObj.$unauth(); 
+			$state.go('signin')
+		}
+}])
 
 .controller('NewListCtrl',['$firebaseAuth','$scope','$ionicPopup','$timeout','$firebaseObject','$firebaseArray', 
 	function($firebaseAuth,$scope,$ionicPopup,$firebaseObject,$firebaseArray){
@@ -122,7 +145,13 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		$scope.authObj = $firebaseAuth(authRef);
 		var authData = $scope.authObj.$getAuth();
 		// console.log(authData.password.email);
-		var userName = authData.password.email.replace(/\./g, '❒☠✍');
+		var userName = authData.password.email.	replace(/\./g, '❒☠').
+												replace(/\$/g, '✾✡').
+												replace(/\#/g, '❄✎').
+												replace(/\[/g, '☎☹').
+												replace(/\]/g, '❍☀').
+												replace(/\//g, '★☪');
+
 
 		var ref = new Firebase("https://meappionic.firebaseio.com/"+userName);
 		var syncObject = $firebaseArray(ref);
@@ -172,7 +201,12 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		$scope.authObj = $firebaseAuth(authRef);
 		var authData = $scope.authObj.$getAuth();
 		// console.log(authData.password.email);
-		var userName = authData.password.email.replace(/\./g, '❒☠✍');
+		var userName = userEmail.	replace(/\./g, '❒☠').
+									replace(/\$/g, '✾✡').
+									replace(/\#/g, '❄✎').
+									replace(/\[/g, '☎☹').
+									replace(/\]/g, '❍☀').
+									replace(/\//g, '★☪');
 
 		var ref = new Firebase("https://meappionic.firebaseio.com/"+userName+"/"+$scope.resourceName);
 		$scope.userData = $firebaseObject(ref);
@@ -201,6 +235,11 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		var ref = new Firebase('https://meappionic.firebaseio.com/');
 		$scope.authObj = $firebaseAuth(ref);
 
+		var authData = $scope.authObj.$getAuth();
+
+		if (authData) {
+			$state.go('tab.dash');
+		}
 
 		$scope.SignIn = function(userEmail,userPass){
 			if (userEmail && userPass){
@@ -223,7 +262,14 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		$scope.authObj = $firebaseAuth(ref);
 
 		$scope.createNewUser = function(userEmail,userPass){
-			var userName = userEmail.replace(/\./g, '❒☠✍');
+
+			// keys cannot contain . $ # [ ] / 
+			var userName = userEmail.	replace(/\./g, '❒☠').
+										replace(/\$/g, '✾✡').
+										replace(/\#/g, '❄✎').
+										replace(/\[/g, '☎☹').
+										replace(/\]/g, '❍☀').
+										replace(/\//g, '★☪');
 			
 			if (userEmail && userPass){
 				ref.child(userName).once('value', function(ss) {
