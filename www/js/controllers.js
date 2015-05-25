@@ -75,8 +75,8 @@ angular.module('starter.controllers', ['ionic','firebase'])
 
 	}])
 
-.controller('EditCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray','$firebaseAuth',
-	function($scope, $stateParams,$firebaseObject,$firebaseArray,$firebaseAuth){ 
+.controller('EditCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray','$firebaseAuth','$state',
+	function($scope, $stateParams,$firebaseObject,$firebaseArray,$firebaseAuth,$state){ 
 		// console.log('$stateParams: ',$stateParams);
 		$scope.pageTitle = $stateParams.pageTitle;
 		$scope.resourceName = $stateParams.resourceName;
@@ -107,6 +107,7 @@ angular.module('starter.controllers', ['ionic','firebase'])
 				$scope.userData.$save()
 				// console.log("userData: ",$scope.userData);
 				// console.log("newLogin: ", newLogin);
+				$state.go('tab.dash');
 			}
 		}
 
@@ -193,20 +194,20 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		
 }])
 
-.controller('NewAddCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray','$state','$firebaseAuth',
-	function($scope, $stateParams,$firebaseObject,$firebaseArray,$state,$firebaseAuth){
+.controller('NewAddCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray','$state','$firebaseAuth','$ionicHistory',
+	function($scope, $stateParams,$firebaseObject,$firebaseArray,$state,$firebaseAuth,$ionicHistory){
 		$scope.resourceName = $stateParams.resourceName;
 
 		var authRef = new Firebase("https://meappionic.firebaseio.com/");
 		$scope.authObj = $firebaseAuth(authRef);
 		var authData = $scope.authObj.$getAuth();
 		// console.log(authData.password.email);
-		var userName = userEmail.	replace(/\./g, '❒☠').
-									replace(/\$/g, '✾✡').
-									replace(/\#/g, '❄✎').
-									replace(/\[/g, '☎☹').
-									replace(/\]/g, '❍☀').
-									replace(/\//g, '★☪');
+		var userName = authData.password.email.	replace(/\./g, '❒☠').
+												replace(/\$/g, '✾✡').
+												replace(/\#/g, '❄✎').
+												replace(/\[/g, '☎☹').
+												replace(/\]/g, '❍☀').
+												replace(/\//g, '★☪');
 
 		var ref = new Firebase("https://meappionic.firebaseio.com/"+userName+"/"+$scope.resourceName);
 		$scope.userData = $firebaseObject(ref);
@@ -225,7 +226,7 @@ angular.module('starter.controllers', ['ionic','firebase'])
 
 			// Go back 2 views
 			// $state.go('tab.dash');
-
+			$ionicHistory.goBack(-2);
 		}
 }])
 
