@@ -43,7 +43,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
 	.state('forgotpassword', {
 	  url: '/forgot-password',
-	  templateUrl: 'templates/login/forgot-password.html'
+	  templateUrl: 'templates/login/forgot-password.html',
+	  controller: 'RegCtrl'
 	})
 
   // setup an abstract state for the tabs directive

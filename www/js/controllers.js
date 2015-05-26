@@ -1,7 +1,12 @@
 angular.module('starter.controllers', ['ionic','firebase'])
 
-.controller('DashCtrl', ['$firebaseAuth','$scope','$ionicPopup','$timeout','$firebaseObject','$firebaseArray',
-	function($firebaseAuth,$scope,$ionicPopup,$firebaseObject,$firebaseArray) {
+.controller('DashCtrl', ['$ionicLoading','$firebaseAuth','$scope','$ionicPopup','$timeout','$firebaseObject','$firebaseArray',
+	function($ionicLoading,$firebaseAuth,$scope,$ionicPopup,$firebaseObject,$firebaseArray) {
+		$ionicLoading.show({
+			template: '<ion-spinner class="spinner-energized"></ion-spinner>'
+			// noBackdrop: true,
+
+		});
 		var authRef = new Firebase("https://meappionic.firebaseio.com/");
 		$scope.authObj = $firebaseAuth(authRef);
 		var authData = $scope.authObj.$getAuth();
@@ -17,7 +22,12 @@ angular.module('starter.controllers', ['ionic','firebase'])
 
 		// Syncing to firebase
 		var ref = new Firebase("https://meappionic.firebaseio.com/"+userName);
-		var syncObject = $firebaseArray(ref); 
+		var syncObject = $firebaseArray(ref);
+		
+		syncObject.$loaded().then(function(x){
+			$ionicLoading.hide();
+		}); 
+
 		syncObject.$bindTo($scope, "contacts");
 
 		// Returns icon name for resources
@@ -133,9 +143,25 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		var authRef = new Firebase("https://meappionic.firebaseio.com/");
 		var authObj = $firebaseAuth(authRef);
 
+		var authData = authObj.$getAuth();
+
 		$scope.LogOut = function(){
 			authObj.$unauth(); 
 			$state.go('signin')
+		};
+
+		$scope.MakeNewPass = function(userPass,userPass1,userPass2){
+			if (userPass && userPass1 && userPass2 && userPass1===userPass2){
+				authObj.$changePassword({
+					email: authData.password.email,
+					oldPassword: userPass,
+					newPassword: userPass1
+				}).then(function() {
+					console.log("Password changed successfully!");
+				}).catch(function(error) {
+					console.error("Error: ", error);
+				});
+			}
 		}
 }])
 
@@ -304,7 +330,17 @@ angular.module('starter.controllers', ['ionic','firebase'])
 			}
 		}
 
-
+		$scope.ForgotPass = function(userEmail){
+			if (userEmail){
+				$scope.authObj.$resetPassword({
+					email: userEmail
+				}).then(function() {
+					console.log("Password reset email sent successfully!");
+				}).catch(function(error) {
+					console.error("Error: ", error);
+				});
+			}
+		}
 }]);	
 
 
