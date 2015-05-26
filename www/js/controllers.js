@@ -3,7 +3,7 @@ angular.module('starter.controllers', ['ionic','firebase'])
 .controller('DashCtrl', ['$ionicLoading','$firebaseAuth','$scope','$ionicPopup','$timeout','$firebaseObject','$firebaseArray',
 	function($ionicLoading,$firebaseAuth,$scope,$ionicPopup,$firebaseObject,$firebaseArray) {
 		$ionicLoading.show({
-			template: '<ion-spinner class="spinner-energized"></ion-spinner>'
+			template: '<ion-spinner class="spinner-balanced"></ion-spinner>'
 			// noBackdrop: true,
 
 		});
