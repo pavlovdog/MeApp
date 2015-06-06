@@ -10,6 +10,16 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		var authRef = new Firebase("https://meappionic.firebaseio.com/");
 		$scope.authObj = $firebaseAuth(authRef);
 		var authData = $scope.authObj.$getAuth();
+
+		// Return user to the sign-in page if he doesn't logged in
+		if (!authData){
+			$state.go('signin')
+			// console.log('Check auth: error')
+		}
+		else{
+			// console.log('Check auth: successfully')
+		}
+
 		// console.log(authData.password.email);
 		var userName = authData.password.email.	replace(/\./g, '❒☠').
 												replace(/\$/g, '✾✡').
@@ -48,7 +58,11 @@ angular.module('starter.controllers', ['ionic','firebase'])
 				'skype' : 'icon ion-social-skype-outline',
 				'vimeo' : 'icon ion-social-vimeo-outline',
 				'dribble' : 'icon ion-social-dribbble-outline',
-				'email': 'icon ion-android-mail'
+				'email': 'icon ion-android-mail',
+				'username': 'icon ion-android-desktop',
+				'name': 'icon ion-android-person',
+				'adress': 'icon ion-android-pin',
+				'about_me': 'icon ion-android-create'
 			}
 
 			return IconsDict[resourse]
@@ -94,6 +108,16 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		var authRef = new Firebase("https://meappionic.firebaseio.com/");
 		$scope.authObj = $firebaseAuth(authRef);
 		var authData = $scope.authObj.$getAuth();
+
+		// Return user to the sign-in page if he doesn't logged in
+		if (!authData){
+			$state.go('signin')
+			// console.log('Check auth: error')
+		}
+		else{
+			// console.log('Check auth: successfully')
+		}
+
 		// console.log(authData.password.email);
 		var userName = authData.password.email.	replace(/\./g, '❒☠').
 												replace(/\$/g, '✾✡').
@@ -123,15 +147,63 @@ angular.module('starter.controllers', ['ionic','firebase'])
 
 }])
 
-.controller('ChatsCtrl', function($scope, Chats) {
-  $scope.chats = Chats.all();
-  // console.log('Chats.all() = ', $scope.chats);
-})
+.controller('FriendsCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray','$firebaseAuth','$state',
+	function($scope, $stateParams, $firebaseObject,$firebaseArray,$firebaseAuth,$state){
+		// Get auth data and check if user is logged in
+		var authRef = new Firebase("https://meappionic.firebaseio.com/");
+		$scope.authObj = $firebaseAuth(authRef);
+		var authData = $scope.authObj.$getAuth();
+		
+		var userEmail = authData.password.email.replace(/\./g, '❒☠').
+												replace(/\$/g, '✾✡').
+												replace(/\#/g, '❄✎').
+												replace(/\[/g, '☎☹').
+												replace(/\]/g, '❍☀').
+												replace(/\//g, '★☪');
 
-.controller('ChatDetailCtrl', ['$scope', '$stateParams', function($scope, $stateParams) {
-  $scope.chatId = $stateParams.chatId;
-  console.log('$stateParams: ',$stateParams);
-}])
+		if (!authData){
+			$state.go('signin')
+			// console.log('Check auth: error')
+		}
+		else{
+			// console.log('Check auth: successfully')
+		}
+
+		$scope.userSearch = function(name){
+			var name = name.replace(/\./g, '❒☠').
+							replace(/\$/g, '✾✡').
+							replace(/\#/g, '❄✎').
+							replace(/\[/g, '☎☹').
+							replace(/\]/g, '❍☀').
+							replace(/\//g, '★☪');
+
+			var searchRef = new Firebase("https://meappionic.firebaseio.com/" + name)
+			var searchAns = $firebaseObject(searchRef);
+			searchAns.$loaded(function(){
+				// console.log(searchAns.$value !== null)
+				if (searchAns.$value !== null){
+					$scope.searchFound = true;
+					// console.log(searchAns);				
+				}
+			})
+		}
+
+		$scope.addToFriends = function(){
+			var newFriend = new Firebase('https://meappionic.firebaseio.com/'+userEmail+'/friends');
+			var syncObject = $firebaseObject(newFriend);
+			syncObject.$bindTo($scope, "friends");
+			$scope.friends['sdf❒☠asd'] = 0;
+
+		}
+	}
+])
+
+.controller('FriendDetailCtrl', ['$scope', '$stateParams', function($scope,$stateParams) 
+	{   
+		$scope.chatId = $stateParams.chatId;
+		console.log('$stateParams: ',$stateParams); 
+	}
+])
 
 .controller('AccountCtrl', ['$scope','$firebaseAuth','$state',
 	function($scope,$firebaseAuth,$state) {
@@ -144,6 +216,15 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		var authObj = $firebaseAuth(authRef);
 
 		var authData = authObj.$getAuth();
+
+		// Return user to the sign-in page if he doesn't logged in
+		if (!authData){
+			$state.go('signin')
+			// console.log('Check auth: error')
+		}
+		else{
+			// console.log('Check auth: successfully')
+		}
 
 		$scope.LogOut = function(){
 			authObj.$unauth(); 
@@ -171,6 +252,16 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		var authRef = new Firebase("https://meappionic.firebaseio.com/");
 		$scope.authObj = $firebaseAuth(authRef);
 		var authData = $scope.authObj.$getAuth();
+
+		// Return user to the sign-in page if he doesn't logged in
+		if (!authData){
+			$state.go('signin')
+			// console.log('Check auth: error')
+		}
+		else{
+			// console.log('Check auth: successfully')
+		}
+
 		// console.log(authData.password.email);
 		var userName = authData.password.email.	replace(/\./g, '❒☠').
 												replace(/\$/g, '✾✡').
@@ -206,7 +297,11 @@ angular.module('starter.controllers', ['ionic','firebase'])
 				'skype' : 'icon ion-social-skype-outline',
 				'vimeo' : 'icon ion-social-vimeo-outline',
 				'dribble' : 'icon ion-social-dribbble-outline',
-				'email': 'icon ion-android-mail'
+				'email': 'icon ion-android-mail',
+				'username': 'icon ion-android-desktop',
+				'name': 'icon ion-android-person',
+				'adress': 'icon ion-android-pin',
+				'about_me': 'icon ion-android-create'
 			}
 
 			return IconsDict[resourse]
@@ -216,7 +311,9 @@ angular.module('starter.controllers', ['ionic','firebase'])
 						"instagram", "phone_home", "linkedin", 
 						"twitch", "googleplus", "snapchat", 
 						"whatsapp", "pinterest", "foursquare", 
-						"skype", "vimeo", "dribble","email"]
+						"skype", "vimeo", "dribble","email",
+						"username","name","adress",
+						"about_me"]
 		
 }])
 
@@ -227,6 +324,16 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		var authRef = new Firebase("https://meappionic.firebaseio.com/");
 		$scope.authObj = $firebaseAuth(authRef);
 		var authData = $scope.authObj.$getAuth();
+
+		// Return user to the sign-in page if he doesn't logged in
+		if (!authData){
+			$state.go('signin')
+			// console.log('Check auth: error')
+		}
+		else{
+			// console.log('Check auth: successfully')
+		}
+
 		// console.log(authData.password.email);
 		var userName = authData.password.email.	replace(/\./g, '❒☠').
 												replace(/\$/g, '✾✡').
