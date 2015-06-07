@@ -10,8 +10,11 @@
 		<input type="password" placeholder="Password" ng-model="userPass">
 	</label>
 
+	<label class="item item-input item-floating-label">
+		<span class="input-label">Name</span>
+		<input type="text" placeholder="Harry Potter" ng-model="userName">
+	</label>
 
-
-	<button class="button button-block button-energized" ng-click="createNewUser(userEmail,userPass)">Reg</button>
+	<button class="button button-block button-energized" ng-click="createNewUser(userEmail,userPass,userName)">Reg</button>
 	</ion-content>
 </ion-view>

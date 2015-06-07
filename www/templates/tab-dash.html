@@ -8,7 +8,7 @@
 			<h2>{{resourceName[0].toUpperCase() + resourceName.slice(1)}}</h2>
 			<p>{{name}}</p>
  		
-			<ion-option-button class="button-assertive" ng-click="ShowConfirm(resourceName)">
+			<ion-option-button class="button-assertive" ng-click="ShowConfirm(resourceName)" ng-if = "resourceName !== 'name'">
 				Delete
 			</ion-option-button>
 		</ion-item>

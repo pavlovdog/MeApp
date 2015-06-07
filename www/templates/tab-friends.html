@@ -15,17 +15,21 @@
 		<ion-item class="item-icon-left item-icon-right" ng-click = "addToFriends(userQuery)">
 			<i class="icon ion-android-person"></i>
 			<h2>{{userQuery}}</h2>
-			<p>{{userDesc}}</p>
 			<i class="icon ion-android-add"></i>
 		</ion-item>
 	</ion-list>	
 
 	<ion-list ng-if="!userQuery || !searchFound">
 		
-		<ion-item class="item-icon-left" href="#/tab/friends/:friendEmail" ng-repeat="(email,permiss) in friendsList">
+		<ion-item class="item-icon-left item-remove-animate" href="#/tab/friends/{{email}}" ng-repeat="(email,details) in friendsList">
 			<i class="icon ion-android-person"></i>
-			<h2>{{email}}</h2>
-			<p>Great guy</p>
+
+			<h2>{{details.name}}</h2>
+
+			<ion-option-button class="button-assertive" ng-click="ShowConfirm(email)">
+				Delete
+			</ion-option-button>
+
 		</ion-item>
 	</ion-list>
 	
