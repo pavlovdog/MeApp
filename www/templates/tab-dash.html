@@ -1,7 +1,7 @@
 <ion-view view-title="Me">
   <ion-content class="padding">
   	<ion-list>
-  		<ion-item class="item-icon-left item-remove-animate" ng-repeat="(resourceName,name) in contacts" type="item-text-wrap" href="#/tab/dash/edit/{{resourceName}}/Edit">
+  		<ion-item class="item-icon-left item-remove-animate" ng-repeat="(resourceName,name) in contacts" type="item-text-wrap" href="#/tab/dash/edit/{{resourceName}}/Edit" ng-if = "resourceName !== 'friends'">
 			<i class="{{iconByResource(resourceName)}}"></i>
 
 			<!-- resourceName looks like 'facebook' and we turn it into 'Facebook' -->

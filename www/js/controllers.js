@@ -161,6 +161,10 @@ angular.module('starter.controllers', ['ionic','firebase'])
 												replace(/\]/g, '❍☀').
 												replace(/\//g, '★☪');
 
+		var friendsRef = new Firebase("https://meappionic.firebaseio.com/"+userEmail+'/friends');
+		$scope.friendsList = $firebaseObject(friendsRef);
+
+
 		if (!authData){
 			$state.go('signin')
 			// console.log('Check auth: error')
@@ -182,17 +186,30 @@ angular.module('starter.controllers', ['ionic','firebase'])
 			searchAns.$loaded(function(){
 				// console.log(searchAns.$value !== null)
 				if (searchAns.$value !== null){
+					$scope.userDesc = 'Just a good person';
+					if (searchAns.about_me){
+						$scope.userDesc = searchAns.about_me;
+					}
+
 					$scope.searchFound = true;
-					// console.log(searchAns);				
+					// console.log(searchAns);
+
 				}
 			})
 		}
 
-		$scope.addToFriends = function(){
-			var newFriend = new Firebase('https://meappionic.firebaseio.com/'+userEmail+'/friends');
+		$scope.addToFriends = function(name){
+			var name = name.replace(/\./g, '❒☠').
+							replace(/\$/g, '✾✡').
+							replace(/\#/g, '❄✎').
+							replace(/\[/g, '☎☹').
+							replace(/\]/g, '❍☀').
+							replace(/\//g, '★☪');
+			var newFriend = new Firebase('https://meappionic.firebaseio.com/'+userEmail+'/friends/'+name);
 			var syncObject = $firebaseObject(newFriend);
-			syncObject.$bindTo($scope, "friends");
-			$scope.friends['sdf❒☠asd'] = 0;
+			syncObject.$value = 0;
+			syncObject.$save();
+
 
 		}
 	}
