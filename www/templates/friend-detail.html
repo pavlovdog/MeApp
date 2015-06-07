@@ -4,10 +4,18 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view view-title={{}}>
+<ion-view view-title="{{friendName}}">
   <ion-content class="padding">
-    <p>
-      {{chatId}}
-    </p>
+  	<ion-list>
+  		<ion-item class="item-icon-left" ng-repeat="(resourceName,name) in contacts" type="item-text-wrap" ng-if = "resourceName !== 'friends'">
+			<i class="{{iconByResource(resourceName)}}"></i>
+
+			<!-- resourceName looks like 'facebook' and we turn it into 'Facebook' -->
+			<h2>{{resourceName[0].toUpperCase() + resourceName.slice(1)}}</h2>
+			<p>{{name}}</p>
+ 		
+		</ion-item>
+  	</ion-list>
+
   </ion-content>
 </ion-view>

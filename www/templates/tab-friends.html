@@ -14,16 +14,15 @@
 	<ion-list ng-if="searchFound && userQuery">
 		<ion-item class="item-icon-left item-icon-right" ng-click = "addToFriends(userQuery)">
 			<i class="icon ion-android-person"></i>
-			<h2>{{userQuery}}</h2>
+			<h2>{{userName}}</h2>
 			<i class="icon ion-android-add"></i>
 		</ion-item>
 	</ion-list>	
 
 	<ion-list ng-if="!userQuery || !searchFound">
 		
-		<ion-item class="item-icon-left item-remove-animate" href="#/tab/friends/{{email}}" ng-repeat="(email,details) in friendsList">
+		<ion-item class="item-icon-left item-remove-animate" href="#/tab/friends/{{email}}/{{details.name}}" ng-repeat="(email,details) in friendsList">
 			<i class="icon ion-android-person"></i>
-
 			<h2>{{details.name}}</h2>
 
 			<ion-option-button class="button-assertive" ng-click="ShowConfirm(email)">

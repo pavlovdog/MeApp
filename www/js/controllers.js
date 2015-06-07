@@ -164,9 +164,10 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		var friendsRef = new Firebase("https://meappionic.firebaseio.com/"+userEmail+'/friends');
 		var syncObject = $firebaseObject(friendsRef);
 
-		syncObject.$bindTo($scope,'friendsList');
+		
 		syncObject.$loaded(function(){
 			console.log($scope.friendsList);
+			syncObject.$bindTo($scope,'friendsList');
 		});
 
 
@@ -191,9 +192,16 @@ angular.module('starter.controllers', ['ionic','firebase'])
 			searchAns.$loaded(function(){
 				// console.log(searchAns.$value !== null)
 				if (searchAns.$value !== null){
+					
+					// Get the name of user
+					var searchRefName = new Firebase("https://meappionic.firebaseio.com/"+friendAdress+'/name')
+					var searchAnsName = $firebaseObject(searchRefName);
+					searchAnsName.$loaded(function(){
+						$scope.userName = searchAnsName.$value;
+						$scope.searchFound = true;
+						// console.log(searchAns);
 
-					$scope.searchFound = true;
-					// console.log(searchAns);
+					});
 
 				}
 			})
@@ -211,12 +219,12 @@ angular.module('starter.controllers', ['ionic','firebase'])
 
 			// Connect to FB and create in friends folder new branch, using friendAdress of
 			var newFriend = new Firebase('https://meappionic.firebaseio.com/'+userEmail+'/friends/'+friendAdress+'/permiss');
-			var syncObject = $firebaseObject(newFriend);
+			var PermissSyncObject = $firebaseObject(newFriend);
 
 			// Ser 'permiss'equal to 0, because friend must access watching his page
 			// It will be added soon
-			syncObject.$value = 0;
-			syncObject.$save();
+			PermissSyncObject.$value = 0;
+			PermissSyncObject.$save();
 
 			// In friendAdress branch add name of friend
 			// It's necessary for fast making a list of friends
@@ -229,9 +237,11 @@ angular.module('starter.controllers', ['ionic','firebase'])
 				var friendName = searchAns.$value;			
 
 				var AddNameRef = new Firebase('https://meappionic.firebaseio.com/'+userEmail+'/friends/'+friendAdress+'/name');
-				var syncObject = $firebaseObject(AddNameRef);
-				syncObject.$value = friendName;
-				syncObject.$save();
+				var NameSyncObject = $firebaseObject(AddNameRef);
+				NameSyncObject.$value = friendName;
+				NameSyncObject.$save();
+
+				$scope.userQuery = '';
 			});
 
 
@@ -258,10 +268,48 @@ angular.module('starter.controllers', ['ionic','firebase'])
 	}
 ])
 
-.controller('FriendDetailCtrl', ['$scope', '$stateParams', function($scope,$stateParams) 
+.controller('FriendDetailCtrl', ['$scope', '$stateParams', '$firebaseObject',
+	function($scope,$stateParams,$firebaseObject) 
 	{   
-		$scope.chatId = $stateParams.chatId;
+		var friendEmail = $stateParams.friendEmail;
+		$scope.friendName = $stateParams.friendName;
 		console.log('$stateParams: ',$stateParams); 
+
+		var userRef = new Firebase('https://meappionic.firebaseio.com/'+ friendEmail);
+		var syncObject = $firebaseObject(userRef);
+
+		syncObject.$loaded(function(){
+			syncObject.$bindTo($scope, 'contacts')
+		});
+
+		// Returns icon name for resources
+		$scope.iconByResource = function(resourse){
+			var IconsDict={
+				'facebook' : 'icon ion-social-facebook-outline',
+				'twitter' : 'icon ion-social-twitter-outline',
+				'github' : 'icon ion-social-github-outline',
+				'instagram' : 'icon ion-social-instagram-outline',
+				'phone_home' : 'icon ion-ios-telephone-outline',
+				'linkedin' : 'icon ion-social-linkedin-outline',
+				'twitch' : 'icon ion-social-twitch-outline',
+				'googleplus' : 'icon ion-social-googleplus-outline',
+				'snapchat' : 'icon ion-social-snapchat-outline',
+				'whatsapp' : 'icon ion-social-whatsapp-outline',
+				'pinterest' : 'icon ion-social-pinterest-outline',
+				'foursquare' : 'icon ion-social-foursquare-outline',
+				'skype' : 'icon ion-social-skype-outline',
+				'vimeo' : 'icon ion-social-vimeo-outline',
+				'dribble' : 'icon ion-social-dribbble-outline',
+				'email': 'icon ion-android-mail',
+				'username': 'icon ion-android-desktop',
+				'name': 'icon ion-android-person',
+				'adress': 'icon ion-android-pin',
+				'about_me': 'icon ion-android-create'
+			}
+
+			return IconsDict[resourse]
+		};
+
 	}
 ])
 
