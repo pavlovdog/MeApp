@@ -28,7 +28,7 @@ angular.module('starter.controllers', ['ionic','firebase'])
 												replace(/\]/g, '❍☀').
 												replace(/\//g, '★☪');
 
-		console.log(userName);
+		// console.log(userName);
 
 		// Syncing to firebase
 		var ref = new Firebase("https://meappionic.firebaseio.com/"+userName);
@@ -136,12 +136,29 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		// $scope.userData.$save();
 
 		$scope.saveNewLogin = function(newLogin){
-			if (newLogin){
+			if (newLogin !== null && $scope.resourceName !=='name'){
 				$scope.userData.$value = newLogin;
 				$scope.userData.$save()
 				// console.log("userData: ",$scope.userData);
 				// console.log("newLogin: ", newLogin);
 				$state.go('tab.dash');
+			}
+			// If user edit name field we must edit also %%%EMAIL%%%%NAME FB
+			else if (newLogin !== null && $scope.resourceName =='name'){
+				$scope.userData.$value = newLogin;
+				$scope.userData.$save()
+				// console.log("userData: ",$scope.userData);
+				// console.log("newLogin: ", newLogin);
+
+				var addRawEmailNameRef = new Firebase('https://meappionic.firebaseio.com/%%%EMAIL%%%NAME/'+userName);
+				var userData = $firebaseObject(addRawEmailNameRef);
+				userData.$value = newLogin;
+				userData.$save();
+
+
+
+				$state.go('tab.dash');
+
 			}
 		}
 
@@ -149,11 +166,17 @@ angular.module('starter.controllers', ['ionic','firebase'])
 
 .controller('FriendsCtrl', ['$scope', '$stateParams', '$firebaseObject','$firebaseArray','$firebaseAuth','$state','$ionicPopup',
 	function($scope, $stateParams, $firebaseObject,$firebaseArray,$firebaseAuth,$state,$ionicPopup){
+
 		// Get auth data and check if user is logged in
 		var authRef = new Firebase("https://meappionic.firebaseio.com/");
 		$scope.authObj = $firebaseAuth(authRef);
 		var authData = $scope.authObj.$getAuth();
-		
+		if (!authData){
+			$state.go('signin')
+			// console.log('Check auth: error')
+		}
+
+		// Get user email and check it
 		var userEmail = authData.password.email.replace(/\./g, '❒☠').
 												replace(/\$/g, '✾✡').
 												replace(/\#/g, '❄✎').
@@ -161,23 +184,37 @@ angular.module('starter.controllers', ['ionic','firebase'])
 												replace(/\]/g, '❍☀').
 												replace(/\//g, '★☪');
 
+		// Get the list of friends
+		// It looks like:
+		// friends:{
+		//		sergeydolg2@gmail.com:{
+		//			permiss: 0 
+		//}}
+		// Permiss means that sergeydolg2 don't access us to watch his page
+		// But this function is not ready now
 		var friendsRef = new Firebase("https://meappionic.firebaseio.com/"+userEmail+'/friends');
 		var syncObject = $firebaseObject(friendsRef);
-
 		
+		$scope.friendsDict = {};
+
 		syncObject.$loaded(function(){
-			console.log($scope.friendsList);
-			syncObject.$bindTo($scope,'friendsList');
-		});
+			console.log(syncObject);
+			syncObject.$bindTo($scope,'friendsList').then(function(){
+				// console.log(Object.keys($scope.friendsList))
+				Object.keys($scope.friendsList).forEach(function(value){
+					if (value[0] !== '$'){
+						var tmpRef = new Firebase('https://meappionic.firebaseio.com/%%%EMAIL%%%NAME/'+value);
+						var tmpSync = $firebaseObject(tmpRef);
 
+						tmpSync.$loaded(function(){
+							$scope.friendsDict[value] = tmpSync.$value;
+						})
+					}
+				})
+			});
 
-		if (!authData){
-			$state.go('signin')
-			// console.log('Check auth: error')
-		}
-		else{
-			// console.log('Check auth: successfully')
-		}
+		})
+
 
 		$scope.userSearch = function(friendAdress){
 			var friendAdress = friendAdress.replace(/\./g, '❒☠').
@@ -192,17 +229,21 @@ angular.module('starter.controllers', ['ionic','firebase'])
 			searchAns.$loaded(function(){
 				// console.log(searchAns.$value !== null)
 				if (searchAns.$value !== null){
+
 					
+					$scope.searchSuccess = true;
+					console.log('searchAns.$value !== null: ',searchAns.$value !== null);
+					console.log('$scope.searchSuccess: ', $scope.searchSuccess);
 					// Get the name of user
 					var searchRefName = new Firebase("https://meappionic.firebaseio.com/"+friendAdress+'/name')
 					var searchAnsName = $firebaseObject(searchRefName);
 					searchAnsName.$loaded(function(){
 						$scope.userName = searchAnsName.$value;
-						$scope.searchFound = true;
+						
 						// console.log(searchAns);
 
 					});
-
+					return true
 				}
 			})
 		}
@@ -229,21 +270,20 @@ angular.module('starter.controllers', ['ionic','firebase'])
 			// In friendAdress branch add name of friend
 			// It's necessary for fast making a list of friends
 
-			// Get the name of this email user
-			var searchRef = new Firebase("https://meappionic.firebaseio.com/" + friendAdress + '/name')
-			var searchAns = $firebaseObject(searchRef);
+			// // Get the name of this email user
+			// var searchRef = new Firebase("https://meappionic.firebaseio.com/" + friendAdress + '/name')
+			// var searchAns = $firebaseObject(searchRef);
 
-			searchAns.$loaded(function(){
-				var friendName = searchAns.$value;			
+			// searchAns.$loaded(function(){
+			// 	var friendName = searchAns.$value;			
 
-				var AddNameRef = new Firebase('https://meappionic.firebaseio.com/'+userEmail+'/friends/'+friendAdress+'/name');
-				var NameSyncObject = $firebaseObject(AddNameRef);
-				NameSyncObject.$value = friendName;
-				NameSyncObject.$save();
+			// 	var AddNameRef = new Firebase('https://meappionic.firebaseio.com/'+userEmail+'/friends/'+friendAdress+'/name');
+			// 	var NameSyncObject = $firebaseObject(AddNameRef);
+			// 	NameSyncObject.$value = friendName;
+			// 	NameSyncObject.$save();
 
-				$scope.userQuery = '';
-			});
-
+			// 	$scope.userQuery = '';
+			// });
 
 		}
 
@@ -258,7 +298,11 @@ angular.module('starter.controllers', ['ionic','firebase'])
 
 			confirmPopup.then(function(res) {
 				if(res) {
-					delete $scope.friendsList[name]
+					delete $scope.friendsDict[name]
+					var deleteRef = new Firebase('https://meappionic.firebaseio.com/'+userEmail+'/friends/'+name);
+					var deleteSync = $firebaseObject(deleteRef);
+					deleteSync.$remove();
+
 				} else {
 					console.log('Nope');
 				}
@@ -266,6 +310,7 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		};
 
 	}
+
 ])
 
 .controller('FriendDetailCtrl', ['$scope', '$stateParams', '$firebaseObject',
@@ -311,6 +356,7 @@ angular.module('starter.controllers', ['ionic','firebase'])
 		};
 
 	}
+
 ])
 
 .controller('AccountCtrl', ['$scope','$firebaseAuth','$state',
@@ -352,6 +398,7 @@ angular.module('starter.controllers', ['ionic','firebase'])
 				});
 			}
 		}
+
 }])
 
 .controller('NewListCtrl',['$firebaseAuth','$scope','$ionicPopup','$timeout','$firebaseObject','$firebaseArray', 
@@ -469,6 +516,7 @@ angular.module('starter.controllers', ['ionic','firebase'])
 			// $state.go('tab.dash');
 			$ionicHistory.goBack(-2);
 		}
+
 }])
 
 .controller('SignInCtrl', ['$state','$scope', '$firebaseAuth','$firebaseObject','$firebaseArray',
@@ -522,18 +570,25 @@ angular.module('starter.controllers', ['ionic','firebase'])
 							password: userPass
 						}).then(function(uD) {
 						// create new user in FB, using email adress
-						// console.log(userData);
+
+						// Add user email to FB
 						var newRef = new Firebase('https://meappionic.firebaseio.com/'+userCheckedEmail+'/email');
 						var userData = $firebaseObject(newRef);
 						userData.$value = userEmail;
 						userData.$save();
 
+						// Add user name to FB 
 						var addUsernameRef = new Firebase('https://meappionic.firebaseio.com/'+userCheckedEmail+'/name')
 						var userData = $firebaseObject(addUsernameRef);
 						userData.$value = userName;
 						userData.$save();
 
+						// Add raw email-name to FB %%%EMAIL%%%NAME
 
+						var addRawEmailNameRef = new Firebase('https://meappionic.firebaseio.com/%%%EMAIL%%%NAME/'+userCheckedEmail);
+						var userData = $firebaseObject(addRawEmailNameRef);
+						userData.$value = userName;
+						userData.$save();
 						
 						// return to the login page
 						$state.go('signin');
